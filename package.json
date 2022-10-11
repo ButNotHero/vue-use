@@ -1,0 +1,44 @@
+{
+  "name": "@butnothero/vue-use",
+  "version": "1.0.0",
+  "description": "My Vue hooks",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ButNotHero/"
+  },
+  "author": "butnothero@gmail.com",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "files": [
+    "./dist/*"
+  ],
+  "exports": {
+    ".": {
+      "require": "./dist/index.js",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "yarn run build:clean && yarn build:js",
+    "build:clean": "rimraf dist",
+    "build:js": "tsup src/index.ts --format cjs,esm --dts --clean"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@types/node": "^18.7.13",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.2.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "prettier": "2.4.1",
+    "rimraf": "^3.0.2",
+    "tsup": "^6.2.2",
+    "typescript": "^4.4.4"
+  }
+}
