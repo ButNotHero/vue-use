@@ -101,10 +101,10 @@ export const useStyled = (options?: string | StyledOptions) => {
 
   return {
     getClasses,
-    // addCss,
-    // observe,
-    // removeCss,
-    // haveCss,
+    addCss,
+    observe,
+    removeCss,
+    haveCss,
     addModifier,
   };
 };
