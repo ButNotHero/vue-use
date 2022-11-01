@@ -1,6 +1,6 @@
 export interface Bem {
   blockName: string;
-  modificatorSeparator?: string;
+  modifierSeparator?: string;
 }
 
 export interface StyledOptions {
@@ -8,6 +8,6 @@ export interface StyledOptions {
   bem?: string | Bem;
 }
 
-export interface AddModificatorOptions {
+export interface AddModifierOptions {
   makeObserve?: boolean;
 }

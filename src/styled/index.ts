@@ -1,5 +1,5 @@
-import { ref, watch } from 'vue';
-import type { StyledOptions, AddModificatorOptions } from '@/styled/types';
+import { ref, watch, computed } from 'vue';
+import type { StyledOptions, AddModifierOptions } from './types';
 
 /**
  * Удобное управление CSS внутри компонента
@@ -8,9 +8,11 @@ import type { StyledOptions, AddModificatorOptions } from '@/styled/types';
 export const useStyled = (options?: string | StyledOptions) => {
   const curCss = ref<string>('');
   const blockName = ref<string>('');
-  const modificatorSeparator = ref<string>('--');
+  const modifierSeparator = ref<string>('--');
 
-  const init = (): void => {
+  (function constructor(): void {
+    if (!options || (typeof options !== 'object' && typeof options !== 'string')) return;
+
     if (typeof options !== 'object') {
       curCss.value = options as string;
       return;
@@ -21,21 +23,17 @@ export const useStyled = (options?: string | StyledOptions) => {
     if (typeof bem === 'object' && bem?.blockName) {
       blockName.value = bem?.blockName;
 
-      if (bem?.modificatorSeparator) {
-        modificatorSeparator.value = bem.modificatorSeparator;
+      if (bem?.modifierSeparator) {
+        modifierSeparator.value = bem.modifierSeparator;
       }
     } else if (typeof bem === 'string') {
       blockName.value = bem;
     }
 
     curCss.value = css;
-  };
+  })();
 
-  init();
-
-  const getClasses = (): string => {
-    return curCss.value.trim();
-  };
+  const getClasses = computed(() => curCss.value.trim());
 
   const haveCss = (css: string): boolean => {
     return curCss.value.includes(css);
@@ -57,13 +55,19 @@ export const useStyled = (options?: string | StyledOptions) => {
     }
   };
 
-  const addModificator = (
-    modificator: string,
+  const createModifier = (name: string): string =>
+    `${blockName.value}${modifierSeparator.value}${name}`;
+
+  const addModifier = (
+    modifier?: string | string[],
     conditional?: () => boolean,
-    options: AddModificatorOptions = {},
+    options: AddModifierOptions = {},
   ) => {
-    const css = `${blockName.value}${modificatorSeparator.value}${modificator}`;
+    if (!modifier) return;
+
     const { makeObserve = true } = options;
+    const css = Array.isArray(modifier) ? '' : createModifier(modifier);
+
     if (typeof conditional !== 'undefined') {
       if (makeObserve) {
         observe(css, conditional);
@@ -97,10 +101,10 @@ export const useStyled = (options?: string | StyledOptions) => {
 
   return {
     getClasses,
-    addCss,
-    observe,
-    removeCss,
-    haveCss,
-    addModificator,
+    // addCss,
+    // observe,
+    // removeCss,
+    // haveCss,
+    addModifier,
   };
 };
